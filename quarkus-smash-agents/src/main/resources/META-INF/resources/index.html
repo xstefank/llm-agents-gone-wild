@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMASH! — Hulk &amp; Hyde Anger Release Portal</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+    <style>
+        :root {
+            --green: #4ade80;
+            --green-dark: #166534;
+            --green-glow: rgba(74,222,128,0.25);
+            --red: #ef4444;
+            --bg: #080c08;
+            --card: #0f1a0f;
+            --border: #1e3a1e;
+            --muted: #6b7280;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: #d1fae5;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem 4rem;
+        }
+
+        /* ── Header ─────────────────────────────── */
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--green);
+            text-shadow: 0 0 24px var(--green), 0 0 60px var(--green-glow);
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { text-shadow: 0 0 24px var(--green), 0 0 60px var(--green-glow); }
+            50%       { text-shadow: 0 0 40px var(--green), 0 0 90px rgba(74,222,128,0.4); }
+        }
+
+        .header p {
+            color: var(--muted);
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.06em;
+        }
+
+        /* ── Character panels ────────────────────── */
+        .characters {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .panel {
+            width: 160px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.2rem 1rem;
+            text-align: center;
+        }
+
+        .panel.hyde  { border-color: #374151; }
+        .panel.hulk  { border-color: var(--green-dark); box-shadow: 0 0 24px var(--green-glow); }
+
+        .panel svg { display: block; margin: 0 auto 0.6rem; }
+
+        .panel-name {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: bold;
+        }
+        .panel.hyde  .panel-name { color: #9ca3af; }
+        .panel.hulk  .panel-name { color: var(--green); }
+
+        .panel-sub {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        .vs {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--red);
+            text-shadow: 0 0 12px rgba(239,68,68,0.5);
+            flex-shrink: 0;
+        }
+
+        /* ── Form card ───────────────────────────── */
+        .form-card {
+            width: 100%;
+            max-width: 580px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 0 40px rgba(74,222,128,0.06);
+        }
+
+        .form-card h2 {
+            text-align: center;
+            color: var(--green);
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.6rem;
+        }
+
+        .field { margin-bottom: 1.4rem; }
+
+        label {
+            display: block;
+            color: #86efac;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.45rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            background: var(--bg);
+            border: 1px solid #1e3a1e;
+            border-radius: 8px;
+            color: #d1fae5;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+        textarea::placeholder { color: #374151; }
+
+        select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid #1e3a1e;
+            border-radius: 8px;
+            color: #d1fae5;
+            padding: 0.65rem 0.75rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234ade80' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.9rem center;
+        }
+        select:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+        select option { background: #0f1a0f; }
+
+        input[type="file"] {
+            width: 100%;
+            background: var(--bg);
+            border: 1px dashed #2d4a2d;
+            border-radius: 8px;
+            color: var(--muted);
+            padding: 0.85rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        input[type="file"]:hover { border-color: var(--green); }
+
+        .file-hint {
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-top: 0.3rem;
+        }
+
+        .smash-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #14532d, var(--green));
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 1.3rem;
+            font-weight: bold;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            margin-top: 0.4rem;
+        }
+        .smash-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 24px rgba(74,222,128,0.45);
+        }
+        .smash-btn:active { transform: scale(0.97); }
+
+        /* ── HTMX indicator ──────────────────────── */
+        .htmx-indicator { display: none; text-align: center; padding: 1rem; color: var(--green); }
+        .htmx-request .htmx-indicator,
+        .htmx-request.htmx-indicator { display: block; }
+
+        /* ── Result area ─────────────────────────── */
+        #result { width: 100%; max-width: 580px; margin-top: 2rem; }
+
+        .result-card {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            animation: pop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes pop {
+            from { opacity: 0; transform: scale(0.9) translateY(-12px); }
+            to   { opacity: 1; transform: scale(1)   translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>💢 SMASH! 💢</h1>
+    <p>Hulk &amp; Hyde Anger Release Portal</p>
+</div>
+
+<!-- Character display -->
+<div class="characters">
+    <!-- Dr. Hyde -->
+    <div class="panel hyde">
+        <svg width="72" height="80" viewBox="0 0 72 80">
+            <!-- coat -->
+            <rect x="8" y="52" width="56" height="28" rx="6" fill="#374151"/>
+            <rect x="22" y="52" width="28" height="28" fill="#4b5563"/>
+            <!-- head -->
+            <ellipse cx="36" cy="36" rx="24" ry="26" fill="#9ca3af"/>
+            <!-- hair -->
+            <ellipse cx="36" cy="12" rx="22" ry="10" fill="#1f2937"/>
+            <!-- eyes — calm -->
+            <ellipse cx="26" cy="34" rx="4" ry="3.5" fill="#111"/>
+            <ellipse cx="46" cy="34" rx="4" ry="3.5" fill="#111"/>
+            <circle cx="27" cy="33" r="1" fill="#fff"/>
+            <circle cx="47" cy="33" r="1" fill="#fff"/>
+            <!-- neutral mouth -->
+            <path d="M 28 47 Q 36 50 44 47" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- bow tie -->
+            <polygon points="30,56 36,60 30,64" fill="#6b7280"/>
+            <polygon points="42,56 36,60 42,64" fill="#6b7280"/>
+            <circle cx="36" cy="60" r="2.5" fill="#4b5563"/>
+        </svg>
+        <div class="panel-name">Dr. Hyde</div>
+        <div class="panel-sub">calm... for now</div>
+    </div>
+
+    <div class="vs">⚡ VS ⚡</div>
+
+    <!-- The Hulk -->
+    <div class="panel hulk">
+        <svg width="72" height="80" viewBox="0 0 72 80">
+            <!-- shirt torn -->
+            <rect x="4" y="50" width="64" height="30" rx="4" fill="#166534"/>
+            <polygon points="20,50 36,50 28,80 12,80" fill="#14532d"/>
+            <polygon points="52,50 36,50 44,80 60,80" fill="#14532d"/>
+            <!-- neck + head -->
+            <rect x="28" y="44" width="16" height="12" fill="#22c55e"/>
+            <ellipse cx="36" cy="34" rx="26" ry="26" fill="#22c55e"/>
+            <!-- brow ridge -->
+            <rect x="10" y="20" width="52" height="8" rx="4" fill="#16a34a"/>
+            <!-- angry brows -->
+            <line x1="13" y1="24" x2="30" y2="27" stroke="#14532d" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="59" y1="24" x2="42" y2="27" stroke="#14532d" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- eyes — rage -->
+            <ellipse cx="25" cy="33" rx="5" ry="4" fill="#dc2626"/>
+            <ellipse cx="47" cy="33" rx="5" ry="4" fill="#dc2626"/>
+            <circle cx="25" cy="33" r="2.5" fill="#111"/>
+            <circle cx="47" cy="33" r="2.5" fill="#111"/>
+            <!-- nose -->
+            <ellipse cx="36" cy="41" rx="3" ry="2" fill="#16a34a"/>
+            <!-- angry mouth -->
+            <path d="M 22 50 Q 36 44 50 50" stroke="#14532d" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- teeth -->
+            <rect x="29" y="47" width="5" height="4" rx="1" fill="#fff"/>
+            <rect x="38" y="47" width="5" height="4" rx="1" fill="#fff"/>
+        </svg>
+        <div class="panel-name">The Hulk</div>
+        <div class="panel-sub">RAAAHHH!</div>
+    </div>
+</div>
+
+<!-- Anger form -->
+<div class="form-card">
+    <h2>⚡ Release Your Inner Rage ⚡</h2>
+
+    <form hx-post="/anger"
+          hx-target="#result"
+          hx-swap="innerHTML"
+          hx-encoding="multipart/form-data"
+          hx-indicator="#loading"
+          enctype="multipart/form-data">
+
+        <div class="field">
+            <label for="angerPreset">Quick-select anger</label>
+            <select id="angerPreset" onchange="if(this.value) document.getElementById('angerText').value = this.value; this.value='';">
+                <option value="">— pick a preset or type your own —</option>
+                <option value="My PR has been waiting for review since yesterday and it's a bit frustrating.">[1-3] My PR has been waiting for review since yesterday and it's a bit frustrating.</option>
+                <option value="Someone keeps leaving empty coffee pots in the kitchen.">[1-3] Someone keeps leaving empty coffee pots in the kitchen.</option>
+                <option value="I've been debugging this null pointer for four hours and I'm losing my mind.">[4-7] I've been debugging this null pointer for four hours and I'm losing my mind.</option>
+                <option value="The CI pipeline failed again five minutes before the release.">[4-7] The CI pipeline failed again five minutes before the release.</option>
+                <option value="SOMEONE PUSHED DIRECTLY TO MAIN AND BROKE PRODUCTION!!!">[8-10] SOMEONE PUSHED DIRECTLY TO MAIN AND BROKE PRODUCTION!!!</option>
+                <option value="THEY REWROTE MY SERVICE IN PHP FOR THREE MONTHS WITHOUT TELLING ME!">[8-10] THEY REWROTE MY SERVICE IN PHP FOR THREE MONTHS WITHOUT TELLING ME!</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="angerText">What's Making You ANGRY?!</label>
+            <textarea id="angerText"
+                      name="angerText"
+                      placeholder="Type your rage here..."
+                      required></textarea>
+        </div>
+
+        <div class="field">
+            <label for="angerFile">Anger Evidence <span style="color:var(--muted)">(optional)</span></label>
+            <input type="file" id="angerFile" name="angerFile">
+            <div class="file-hint">Screenshot, document, or any proof of your rage</div>
+        </div>
+
+        <button type="submit" class="smash-btn">💥 SMASH! 💥</button>
+    </form>
+
+    <div id="loading" class="htmx-indicator">
+        Measuring your rage...
+    </div>
+</div>
+
+<div id="result"></div>
+
+</body>
+</html>
