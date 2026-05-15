@@ -27,6 +27,7 @@ public interface AngerEvalWorkflow {
                 <div class="result-header">%s RESPONDS</div>
                 %s
                 <p class="result-text">%s</p>
+                <button class="close-btn" onclick="closeModal()">&#x2715; Close</button>
             </div>
             """.formatted(smasherClass, smasherClass, smasherLabel, svg, cleanSummary);
 
