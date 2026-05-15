@@ -30,5 +30,5 @@ public interface DrBannerAgent {
         Analyze the following text for signs of anger or aggression: {text}.
         """)
     @Agent(description = "Dr. Bruce Banner, a brilliant nuclear physicist and gamma radiation expert who maintains composure at all costs.", outputKey = "bannerAssessment")
-    String assessAnger(String text, short angerLevel);
+    String assessDrBannerAnger(String text, short angerLevel);
 }

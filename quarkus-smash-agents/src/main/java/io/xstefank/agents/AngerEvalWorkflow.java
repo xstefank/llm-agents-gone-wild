@@ -5,6 +5,9 @@ import dev.langchain4j.agentic.declarative.SequenceAgent;
 
 public interface AngerEvalWorkflow {
 
+    String HULK_SVG = "<svg class=\"char-svg\" viewBox=\"0 0 80 110\"><use href=\"#symbol-hulk\"/></svg>";
+    String BANNER_SVG = "<svg class=\"char-svg\" viewBox=\"0 0 80 110\"><use href=\"#symbol-banner\"/></svg>";
+
     @SequenceAgent(outputKey = "angerEvaluation",
         subAgents = {AngerEvalAgent.class, HulkOutWorkflow.class, SmashSufficiencyAgent.class})
     String evaluateAngerAndHulkOut(String text);
@@ -40,6 +43,4 @@ public interface AngerEvalWorkflow {
                 .replace("\"", "&quot;").replace("'", "&#39;").replace("\n", "&#10;");
     }
 
-    String HULK_SVG = "<svg class=\"char-svg\" viewBox=\"0 0 80 110\"><use href=\"#symbol-hulk\"/></svg>";
-    String BANNER_SVG = "<svg class=\"char-svg\" viewBox=\"0 0 80 110\"><use href=\"#symbol-banner\"/></svg>";
 }

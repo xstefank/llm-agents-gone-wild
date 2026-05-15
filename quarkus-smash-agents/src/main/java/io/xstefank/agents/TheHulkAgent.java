@@ -33,5 +33,5 @@ public interface TheHulkAgent {
         Analyze the following text for signs of anger or aggression: {text}.
         """)
     @Agent(description = "The Hulk, the strongest one there is, who speaks in short, explosive sentences and refers to himself in third person.", outputKey = "hulkAssessment")
-    String assessAnger(String text, short angerLevel);
+    String assessHulkAnger(String text, short angerLevel);
 }
