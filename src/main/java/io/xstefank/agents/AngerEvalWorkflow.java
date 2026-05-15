@@ -2,6 +2,8 @@ package io.xstefank.agents;
 
 import dev.langchain4j.agentic.declarative.Output;
 import dev.langchain4j.agentic.declarative.SequenceAgent;
+import io.xstefank.model.Smasher;
+import io.xstefank.model.SmashingResponse;
 
 public interface AngerEvalWorkflow {
 
@@ -10,10 +12,10 @@ public interface AngerEvalWorkflow {
 
     @SequenceAgent(outputKey = "angerEvaluation",
         subAgents = {AngerEvalAgent.class, HulkOutWorkflow.class, SmashSufficiencyAgent.class})
-    String evaluateAngerAndHulkOut(String text);
+    SmashingResponse evaluateAngerAndHulkOut(String text);
 
     @Output
-    static String output(String smashSummary) {
+    static SmashingResponse output(String smashSummary) {
         boolean isHulk = smashSummary.startsWith("HULK");
         String smasherClass = isHulk ? "hulk" : "banner";
         String smasherLabel = isHulk ? "THE HULK" : "DR. BANNER";
@@ -31,7 +33,8 @@ public interface AngerEvalWorkflow {
         String historyItem = "<div class=\"history-item %s-result\" onclick=\"showPopup(this)\" data-popup=\"%s\">%s<div class=\"history-label\">%s</div></div>"
             .formatted(smasherClass, escapeAttr(resultCard), svg, smasherLabel);
 
-        return resultCard + "<div id=\"history-container\" hx-swap-oob=\"beforeend\">" + historyItem + "</div>";
+        String html = resultCard + "<div id=\"history-container\" hx-swap-oob=\"beforeend\">" + historyItem + "</div>";
+        return new SmashingResponse(isHulk ? Smasher.HULK : Smasher.DR_BANNER, cleanSummary, html);
     }
 
     private static String escape(String s) {

@@ -1,6 +1,7 @@
 package io.xstefank;
 
 import io.xstefank.agents.AngerEvalWorkflow;
+import io.xstefank.model.SmashingResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -24,6 +25,8 @@ public class AngerResource {
     @Produces(MediaType.TEXT_HTML)
     public String submitAnger(@RestForm String angerText, @RestForm FileUpload angerFile) {
         LOG.infof("Received anger text: %s", angerText);
-        return angerEvalWorkflow.evaluateAngerAndHulkOut(angerText);
+        SmashingResponse smashingResponse = angerEvalWorkflow.evaluateAngerAndHulkOut(angerText);
+        LOG.infof("Smashing response: %s", smashingResponse);
+        return smashingResponse.html();
     }
 }
