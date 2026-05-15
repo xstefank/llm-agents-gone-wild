@@ -1,6 +1,9 @@
 package io.xstefank;
 
 import io.xstefank.agents.AngerEvalAgent;
+import io.xstefank.agents.AngerEvalWorkflow;
+import io.xstefank.model.Smasher;
+import io.xstefank.model.SmashingResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -17,7 +20,7 @@ public class AngerResource {
     private static final Logger LOG = Logger.getLogger(AngerResource.class);
 
     @Inject
-    AngerEvalAgent angerEvalAgent;
+    AngerEvalWorkflow angerEvalWorkflow;
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -28,9 +31,9 @@ public class AngerResource {
             LOG.infof("Received anger file: %s (%d bytes)", angerFile.fileName(), angerFile.size());
         }
 
-        short angerLevel = angerEvalAgent.angerEvaluation(angerText);
-        LOG.infof("Anger evaluation " + angerLevel);
+        SmashingResponse resposne = angerEvalWorkflow.evaluateAngerAndHulkOut(angerText);
+        LOG.infof("Anger evaluation " + resposne.smasher() + " responded with: " + resposne.response());
 
-        return "<p>Anger evaluated: " + angerLevel + "</p>";
+        return "<p>Anger evaluated: " + resposne + "</p>";
     }
 }

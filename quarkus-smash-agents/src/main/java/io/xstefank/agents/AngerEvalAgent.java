@@ -1,5 +1,6 @@
 package io.xstefank.agents;
 
+import dev.langchain4j.agentic.Agent;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 
@@ -18,5 +19,6 @@ public interface AngerEvalAgent {
     @UserMessage("""
         Evaluate the anger level in the following test: {text} 
                 """)
+    @Agent(description = "Agent that evaluates the level of anger in a given text.", outputKey = "angerLevel")
     short angerEvaluation(String text);
 }
